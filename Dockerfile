@@ -29,14 +29,13 @@ RUN corepack enable && corepack prepare
 RUN chown node:node .
 USER node
 
-ENV NODE_OPTIONS="--max-old-space-size=8192"
+ENV NODE_OPTIONS=--max-old-space-size=8192
 
 COPY pnpm-lock.yaml .
 RUN pnpm fetch
 
 COPY --chown=node:node . .
 RUN <<EOF
-	export NODE_OPTIONS="--max-old-space-size=8192"
 	pnpm install --recursive --offline --frozen-lockfile
 	npm_config_workspace_concurrency=1 pnpm run build
 	pnpm --filter directus deploy --prod dist
