@@ -36,6 +36,7 @@ RUN pnpm fetch
 
 COPY --chown=node:node . .
 RUN <<EOF
+	export NODE_OPTIONS="--max-old-space-size=512"
 	pnpm install --recursive --offline --frozen-lockfile
 	npm_config_workspace_concurrency=1 pnpm run build
 	pnpm --filter directus deploy --prod dist
